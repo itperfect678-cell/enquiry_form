@@ -406,7 +406,6 @@
             <!-- ITEMS -->
             <div class="section">
                 <div class="section-title">Items</div>
-                <button type="button" class="btn-add-item" onclick="addItemRow()">+ Add Item</button>
 
                 <table class="items-table">
                     <thead>
@@ -485,7 +484,7 @@
 
             row.innerHTML = `
                 <td>
-                    <select class="product-select" name="product" autocomplete="off" required>
+                    <select class="product-select" name="product" autocomplete="off">
                         ${productOptions}
                     </select>
                 </td>
@@ -498,6 +497,21 @@
             `;
 
             tbody.appendChild(row);
+
+            // Add event listener to auto-add next row when product is selected
+            const productSelect = row.querySelector('.product-select');
+            productSelect.addEventListener('change', function() {
+                if (this.value) {
+                    // Check if this is the last row
+                    const lastRow = tbody.rows[tbody.rows.length - 1];
+                    const lastProduct = lastRow.querySelector('.product-select').value;
+
+                    // If the last row has a product selected, add a new empty row
+                    if (lastProduct && this === productSelect) {
+                        addItemRow();
+                    }
+                }
+            });
         }
 
         function removeItemRow(button) {
